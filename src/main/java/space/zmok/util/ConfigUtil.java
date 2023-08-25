@@ -11,7 +11,9 @@ public class ConfigUtil {
 
     {
         Yaml yaml = new Yaml();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.yml");
+        InputStream inputStream = this.getClass()
+                .getClassLoader()
+                .getResourceAsStream("application.yml");
         VARIABLES = yaml.load(inputStream);
     }
 
