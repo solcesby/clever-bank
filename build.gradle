@@ -12,7 +12,7 @@ repositories {
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.28'
 
-    implementation 'org.postgresql:postgresql:42.1.4'
+    implementation 'org.postgresql:postgresql:42.6.0'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
