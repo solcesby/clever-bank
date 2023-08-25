@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @Data
 @Builder
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountEntity {
