@@ -12,8 +12,11 @@ import java.util.UUID;
 public class AccountEntity {
 
     private UUID id;
+
     private BigDecimal amount;
+
     private String currency;
+
     private UserEntity owner;
 
 }

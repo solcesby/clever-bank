@@ -1,18 +1,23 @@
 package space.zmok.repository.impl;
 
 import space.zmok.entity.AccountEntity;
+import space.zmok.entity.UserEntity;
 import space.zmok.repository.AccountRepository;
 import space.zmok.util.ConnectionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Set;
 import java.util.UUID;
 
 public class AccountRepositoryImpl implements AccountRepository {
 
     private static final String SELECT_ACCOUNT_BY_ACCOUNT_ID = """
-            SELECT * FROM account 
+            SELECT * FROM account a 
+            JOIN "user" u
+            ON a.user_id = u.user_id
             WHERE account_id::text=?
             """;
     private static final String UPSERT_ACCOUNT = """
@@ -53,12 +58,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    AccountEntity foundAccount = AccountEntity.builder()
-                            .id((UUID) rs.getObject("account_id"))
-                            .amount(rs.getBigDecimal("amount"))
-                            .currency(rs.getString("currency"))
-                            .build();
-                    System.out.println(foundAccount);
+                    AccountEntity foundAccount = buildAccountEntityFromResultSet(rs);
                     return foundAccount;
                 }
             }
@@ -68,4 +68,20 @@ public class AccountRepositoryImpl implements AccountRepository {
 
         return null;
     }
+
+    private AccountEntity buildAccountEntityFromResultSet(ResultSet rs) throws SQLException {
+        AccountEntity account = AccountEntity.builder()
+                .id((UUID) rs.getObject("account_id"))
+                .amount(rs.getBigDecimal("amount"))
+                .currency(rs.getString("currency"))
+                .owner(UserEntity.builder()
+                        .firstName(rs.getString("first_name"))
+                        .lastName(rs.getString("last_name"))
+                        .id((UUID) rs.getObject("user_id"))
+                        .build())
+                .build();
+        account.getOwner().setAccounts(Set.of(account));
+        return account;
+    }
+
 }
