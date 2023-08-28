@@ -20,7 +20,8 @@ public class AccountRepositoryImpl implements AccountRepository {
             VALUES (?,?,?,?)
             ON CONFLICT (account_id) DO UPDATE
             SET amount = excluded.amount,
-                currency = excluded.currency;
+                currency = excluded.currency,
+                user_id = excluded.user_id;
             """;
 
     @Override
