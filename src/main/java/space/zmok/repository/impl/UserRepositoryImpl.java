@@ -1,6 +1,6 @@
 package space.zmok.repository.impl;
 
-import space.zmok.entity.UserEntity;
+import space.zmok.entity.user.UserEntity;
 import space.zmok.repository.UserRepository;
 import space.zmok.util.ConnectionUtil;
 

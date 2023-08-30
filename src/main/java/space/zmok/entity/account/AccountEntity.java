@@ -1,6 +1,7 @@
-package space.zmok.entity;
+package space.zmok.entity.account;
 
 import lombok.*;
+import space.zmok.entity.user.UserEntity;
 
 import java.math.BigDecimal;
 import java.util.UUID;

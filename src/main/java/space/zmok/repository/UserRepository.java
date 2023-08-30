@@ -1,6 +1,6 @@
 package space.zmok.repository;
 
-import space.zmok.entity.UserEntity;
+import space.zmok.entity.user.UserEntity;
 
 import java.util.UUID;
 
