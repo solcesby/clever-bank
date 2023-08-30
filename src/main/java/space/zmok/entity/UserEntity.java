@@ -17,6 +17,10 @@ public class UserEntity {
 
     private String lastName;
 
+    private String login;
+
+    private String password;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<AccountEntity> accounts;
