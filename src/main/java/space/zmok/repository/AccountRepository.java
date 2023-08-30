@@ -4,10 +4,6 @@ import space.zmok.entity.AccountEntity;
 
 import java.util.UUID;
 
-public interface AccountRepository {
-
-    AccountEntity save(AccountEntity accountEntity);
-
-    AccountEntity findById(UUID accountId);
+public interface AccountRepository extends BaseRepository<AccountEntity, UUID> {
 
 }

@@ -9,15 +9,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AccountRepositoryImpl implements AccountRepository {
 
     private static final String SELECT_ACCOUNT_BY_ACCOUNT_ID = """
-            SELECT * FROM account a 
-            JOIN "user" u
-            ON a.user_id = u.user_id
+            SELECT * FROM account 
             WHERE account_id::text=?
             """;
     private static final String UPSERT_ACCOUNT = """
@@ -27,6 +26,9 @@ public class AccountRepositoryImpl implements AccountRepository {
             SET amount = excluded.amount,
                 currency = excluded.currency,
                 user_id = excluded.user_id;
+            """;
+    private static final String SELECT_ALL_ACCOUNTS = """
+            SELECT * FROM account
             """;
 
     @Override
@@ -58,8 +60,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    AccountEntity foundAccount = buildAccountEntityFromResultSet(rs);
-                    return foundAccount;
+                    return buildAccountEntityFromResultSet(rs);
                 }
             }
         } catch (Exception e) {
@@ -69,19 +70,33 @@ public class AccountRepositoryImpl implements AccountRepository {
         return null;
     }
 
+    @Override
+    public List<AccountEntity> findAll() {
+        List<AccountEntity> foundAccounts = new ArrayList<>();
+
+        try (Connection conn = ConnectionUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(SELECT_ALL_ACCOUNTS);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                foundAccounts.add(buildAccountEntityFromResultSet(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return foundAccounts;
+    }
+
     private AccountEntity buildAccountEntityFromResultSet(ResultSet rs) throws SQLException {
-        AccountEntity account = AccountEntity.builder()
+        return AccountEntity.builder()
                 .id((UUID) rs.getObject("account_id"))
                 .amount(rs.getBigDecimal("amount"))
                 .currency(rs.getString("currency"))
                 .owner(UserEntity.builder()
-                        .firstName(rs.getString("first_name"))
-                        .lastName(rs.getString("last_name"))
                         .id((UUID) rs.getObject("user_id"))
                         .build())
                 .build();
-        account.getOwner().setAccounts(Set.of(account));
-        return account;
     }
 
 }
