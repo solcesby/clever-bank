@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface UserRepository extends BaseRepository<UserEntity, UUID> {
 
+    UserEntity findByLogin (String login);
+
 }
