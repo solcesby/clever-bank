@@ -15,10 +15,6 @@ import java.util.UUID;
 
 public class AccountRepositoryImpl implements AccountRepository {
 
-    private static final String SELECT_ACCOUNT_BY_ACCOUNT_ID = """
-            SELECT * FROM account 
-            WHERE account_id::text=?
-            """;
     private static final String UPSERT_ACCOUNT = """
             INSERT INTO account (account_id, amount, currency, user_id)
             VALUES (?,?,?,?)
@@ -26,6 +22,10 @@ public class AccountRepositoryImpl implements AccountRepository {
             SET amount = excluded.amount,
                 currency = excluded.currency,
                 user_id = excluded.user_id;
+            """;
+    private static final String SELECT_ACCOUNT_BY_ACCOUNT_ID = """
+            SELECT * FROM account
+            WHERE account_id::text=?
             """;
     private static final String SELECT_ALL_ACCOUNTS = """
             SELECT * FROM account
