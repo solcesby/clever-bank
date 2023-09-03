@@ -19,19 +19,12 @@ import java.math.BigDecimal;
 public class TransactionEntity extends AbstractBaseEntity {
 
     private String type;
-
-    private BankEntity receiverBank;
-
-    private BankEntity senderBank;
-
-    private AccountEntity senderAccount;
-
-    private AccountEntity receiverAccount;
-
-    private String description;
-
     private BigDecimal amount;
-
     private String currency;
+    private String description;
+    private BankEntity receiverBank;
+    private BankEntity senderBank;
+    private AccountEntity senderAccount;
+    private AccountEntity receiverAccount;
 
 }

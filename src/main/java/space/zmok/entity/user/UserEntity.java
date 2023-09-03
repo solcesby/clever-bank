@@ -16,11 +16,8 @@ import java.util.Set;
 public class UserEntity extends AbstractBaseEntity {
 
     private String firstName;
-
     private String lastName;
-
     private String login;
-
     private String password;
 
     @ToString.Exclude

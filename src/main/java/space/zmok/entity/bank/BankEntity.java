@@ -16,9 +16,7 @@ import java.util.Set;
 public class BankEntity extends AbstractBaseEntity {
 
     private String name;
-
     private String identifierCode;
-
     private String countryCode;
 
     @ToString.Exclude
