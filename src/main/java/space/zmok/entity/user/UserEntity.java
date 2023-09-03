@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import space.zmok.entity.AbstractBaseEntity;
 import space.zmok.entity.account.AccountEntity;
-import space.zmok.entity.transaction.TransactionEntity;
 
 import java.util.Set;
 
