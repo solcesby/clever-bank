@@ -16,8 +16,10 @@ dependencies {
     implementation 'org.yaml:snakeyaml:2.1'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     implementation 'org.springframework.security:spring-security-crypto:6.1.2'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
 
