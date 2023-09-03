@@ -1,23 +1,35 @@
 package space.zmok.entity.account;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import space.zmok.entity.AbstractBaseEntity;
+import space.zmok.entity.bank.BankEntity;
+import space.zmok.entity.transaction.TransactionEntity;
 import space.zmok.entity.user.UserEntity;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.Set;
 
 @Data
-@Builder
+@SuperBuilder()
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountEntity {
+@EqualsAndHashCode(callSuper = true)
+public class AccountEntity extends AbstractBaseEntity {
 
-    private UUID id;
+    private String accountNumber;
 
     private BigDecimal amount;
 
     private String currency;
 
     private UserEntity owner;
+
+    private BankEntity bank;
+
+    private Set<TransactionEntity> transactions;
 
 }
