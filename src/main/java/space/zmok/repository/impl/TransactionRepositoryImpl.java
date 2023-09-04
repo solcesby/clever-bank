@@ -1,6 +1,5 @@
 package space.zmok.repository.impl;
 
-import space.zmok.entity.bank.BankEntity;
 import space.zmok.entity.transaction.TransactionEntity;
 import space.zmok.repository.TransactionRepository;
 import space.zmok.util.ConnectionUtil;
@@ -93,7 +92,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             e.printStackTrace();
         }
 
-        return null;
+        return foundTransactions;
     }
 
     private TransactionEntity buildTransactionEntityFromResultSet(ResultSet rs) throws SQLException {
