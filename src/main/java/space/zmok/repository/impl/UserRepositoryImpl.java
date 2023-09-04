@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,13 +16,16 @@ import java.util.UUID;
 public class UserRepositoryImpl implements UserRepository {
 
     private static final String UPSERT_USER = """
-            INSERT INTO "user" (user_id, first_name, last_name, login, password)
-            VALUES (?,?,?,?,?)
+            INSERT INTO "user" (user_id, first_name, last_name, login, password, created_at, updated_at, deleted_at)
+            VALUES (?,?,?,?,?,?,?,?)
             ON CONFLICT (user_id) DO UPDATE
             SET first_name = excluded.first_name,
                 last_name = excluded.last_name,
                 login = excluded.login,
-                password = excluded.password
+                password = excluded.password,
+                created_at = excluded.created_at,
+                updated_at = excluded.updated_at,
+                deleted_at = excluded.deleted_at
             """;
     private static final String SELECT_USER_BY_USER_ID = """
             SELECT * FROM "user"
@@ -29,25 +33,28 @@ public class UserRepositoryImpl implements UserRepository {
             """;
     private static final String SELECT_USER_BY_LOGIN = """
             SELECT * FROM "user"
-            WHERE login::text=?
+            WHERE login=?
             """;
     private static final String SELECT_ALL_USERS = """
             SELECT * FROM "user"
             """;
 
     @Override
-    public UserEntity save(UserEntity userEntity) {
+    public UserEntity save(UserEntity entity) {
         try (Connection conn = ConnectionUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(UPSERT_USER)) {
 
-            pstmt.setString(1, String.valueOf(userEntity.getId()));
-            pstmt.setString(2, String.valueOf(userEntity.getFirstName()));
-            pstmt.setString(3, String.valueOf(userEntity.getLastName()));
-            pstmt.setString(4, String.valueOf(userEntity.getLogin()));
-            pstmt.setString(5, String.valueOf(userEntity.getPassword()));
+            pstmt.setString(1, String.valueOf(entity.getId()));
+            pstmt.setString(2, String.valueOf(entity.getFirstName()));
+            pstmt.setString(3, String.valueOf(entity.getLastName()));
+            pstmt.setString(4, String.valueOf(entity.getLogin()));
+            pstmt.setString(5, String.valueOf(entity.getPassword()));
+            pstmt.setString(6, String.valueOf(entity.getCreatedAt()));
+            pstmt.setString(7, String.valueOf(entity.getUpdatedAt()));
+            pstmt.setString(8, String.valueOf(entity.getDeletedAt()));
 
             if (pstmt.executeUpdate() != 0) {
-                return userEntity;
+                return entity;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,11 +65,11 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public UserEntity findById(UUID userId) {
+    public UserEntity findById(UUID entityId) {
         try (Connection conn = ConnectionUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(SELECT_USER_BY_USER_ID)) {
 
-            pstmt.setString(1, String.valueOf(userId));
+            pstmt.setString(1, String.valueOf(entityId));
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -120,6 +127,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .lastName(rs.getString("last_name"))
                 .login(rs.getString("login"))
                 .password(rs.getString("password"))
+                .createdAt((LocalDateTime) rs.getObject("created_at"))
+                .updatedAt((LocalDateTime) rs.getObject("updated_at"))
+                .deletedAt((LocalDateTime) rs.getObject("deleted_at"))
                 .build();
     }
 }
