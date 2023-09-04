@@ -1,24 +1,22 @@
-package space.zmok.entity;
+package space.zmok.entity.user;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import space.zmok.entity.AbstractBaseEntity;
+import space.zmok.entity.account.AccountEntity;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
-
-    private UUID id;
+@EqualsAndHashCode(callSuper = true)
+public class UserEntity extends AbstractBaseEntity {
 
     private String firstName;
-
     private String lastName;
-
     private String login;
-
     private String password;
 
     @ToString.Exclude
